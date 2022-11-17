@@ -31,7 +31,7 @@ namespace Naylo
                 new(OpCodes.Ldc_I4_S, (int)ConsoleColor.Red),
                 new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.ClearConsole))),
                 new(OpCodes.Ldloc_S, stringBuilder.LocalIndex),
-                new(OpCodes.Ldstr, "\n  [!]Operations[!]"),
+                new(OpCodes.Ldstr, "\n  [!] Operations [!]"),
                 new(OpCodes.Callvirt, Method(typeof(StringBuilder), nameof(StringBuilder.AppendLine), new[] { typeof(string) })),
                 new(OpCodes.Pop),
                 new(OpCodes.Ldloc_S, stringBuilder.LocalIndex),
