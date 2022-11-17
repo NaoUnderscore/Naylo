@@ -17,11 +17,13 @@ namespace Naylo
 ██║███████╗    ╚██████╗██║  ██║███████╗╚██████╗╚██████╔╝███████╗██║  ██║   ██║   ╚██████╔╝██║  ██║
 ╚═╝╚══════╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝ v{Assembly.GetExecutingAssembly().GetName().Version}";
 
+#pragma warning disable IDE0060 // Remove unused parameter
         public static void ClearConsole(ConsoleColor color = ConsoleColor.Red)
         {
         }
 
         public static string AskForInput(string message)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             return null;
         }

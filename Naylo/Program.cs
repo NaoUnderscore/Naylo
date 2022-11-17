@@ -25,8 +25,6 @@ namespace Naylo
     [HarmonyPatch(typeof(Program), nameof(Program.Launch))]
     internal static class ProgramPatch
     {
-        static bool INT32__TRYPARSE(string s, out int result) => int.TryParse(s, out result);
-        static bool FLOAT__TRYPARSE(string s, out float result) => float.TryParse(s, out result);
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
             List<CodeInstruction> newInstructions = new(instructions);
@@ -85,12 +83,12 @@ namespace Naylo
                 new CodeInstruction(OpCodes.Ldstr, "Left: ").WithLabels(leftMark),
                 new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.AskForInput))),
                 new(OpCodes.Ldloca_S, left.LocalIndex),
-                new(OpCodes.Call, Method(typeof(ProgramPatch), nameof(FLOAT__TRYPARSE))),
+                new(OpCodes.Call, GetDeclaredMethods(typeof(float)).FirstOrDefault(m => m.Name == "TryParse" && m.GetParameters().Count() < 3)),
                 new(OpCodes.Brfalse_S, leftMark),
                 new CodeInstruction(OpCodes.Ldstr, "Right: ").WithLabels(rightMark),
                 new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.AskForInput))),
                 new(OpCodes.Ldloca_S, right.LocalIndex),
-                new(OpCodes.Call, Method(typeof(ProgramPatch), nameof(FLOAT__TRYPARSE))),
+                new(OpCodes.Call, GetDeclaredMethods(typeof(float)).FirstOrDefault(m => m.Name == "TryParse" && m.GetParameters().Count() < 3)),
                 new(OpCodes.Brfalse_S, rightMark),
                 new(OpCodes.Ldc_I4_S, (int)ConsoleColor.Yellow),
                 new(OpCodes.Call, PropertySetter(typeof(Console), nameof(Console.ForegroundColor))),
