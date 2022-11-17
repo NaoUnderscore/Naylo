@@ -1,5 +1,5 @@
+![nayloclrpng](https://user-images.githubusercontent.com/60253860/202510751-7400c1ce-61d7-4066-9b24-ea5aa54c0b68.png)
 
-![image](https://user-images.githubusercontent.com/60253860/202504026-d30ba5e6-9f63-4aee-894e-3cd3fe536b62.png)
 
 # Naylo - CS2MSIL Calculator
 
