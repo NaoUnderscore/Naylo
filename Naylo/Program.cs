@@ -9,7 +9,9 @@ namespace Naylo
 {
     internal class Program
     {
+#pragma warning disable IDE0060 // Remove unused parameter
         public static void Main(string[] args)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             Harmony HarmonyInstance = new("nayloil.1337");
             HarmonyInstance.PatchAll();
@@ -47,9 +49,6 @@ namespace Naylo
 
             newInstructions.InsertRange(0, new CodeInstruction[]
             {
-                new(OpCodes.Ldc_I4_S, (int)ConsoleColor.Red),
-                new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.ClearConsole))),
-                new(OpCodes.Call, Method(typeof(HUDManager), nameof(HUDManager.Init))),
                 new(OpCodes.Newobj, GetDeclaredConstructors(typeof(MathProcessor))[0]),
                 new(OpCodes.Stloc_S, processor.LocalIndex),
                 new(OpCodes.Ldc_I4_0),
@@ -65,11 +64,14 @@ namespace Naylo
                 new(OpCodes.Br_S, iter),
                 new CodeInstruction(OpCodes.Nop).WithLabels(lpHd), 
                 new CodeInstruction(OpCodes.Nop).WithLabels(optionLpHd),
-                new(OpCodes.Ldstr, "Option: "),
+                new(OpCodes.Ldc_I4_S, (int)ConsoleColor.Red),
+                new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.ClearConsole))),
+                new(OpCodes.Call, Method(typeof(HUDManager), nameof(HUDManager.Init))),
+                new(OpCodes.Ldstr, "  Option: "),
+                new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.AskForInput))),
-                new (OpCodes.Ldloca_S, option.LocalIndex),
-                new(OpCodes.Call, GetDeclaredMethods(typeof(int)).FirstOrDefault(m => m.Name == "TryParse" && m.GetParameters().Count() < 3)),
-                new(OpCodes.Brfalse_S, optionLpHd),
+                new(OpCodes.Call, Method(typeof(int), nameof(int.Parse), new[] { typeof(string) })),
+                new(OpCodes.Stloc_S, option.LocalIndex),
                 new(OpCodes.Ldloc_S, option.LocalIndex),
                 new(OpCodes.Ldc_I4_4),
                 new(OpCodes.Bgt_S, optionLpHd),
@@ -80,12 +82,14 @@ namespace Naylo
                 new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.ClearConsole))),
                 new(OpCodes.Ldloc_S, option.LocalIndex),
                 new(OpCodes.Stloc_S, computationType.LocalIndex),
-                new CodeInstruction(OpCodes.Ldstr, "Left: ").WithLabels(leftMark),
+                new CodeInstruction(OpCodes.Ldstr, "  Left OP: ").WithLabels(leftMark),
+                new(OpCodes.Ldc_I4_0),
                 new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.AskForInput))),
                 new(OpCodes.Ldloca_S, left.LocalIndex),
                 new(OpCodes.Call, GetDeclaredMethods(typeof(float)).FirstOrDefault(m => m.Name == "TryParse" && m.GetParameters().Count() < 3)),
                 new(OpCodes.Brfalse_S, leftMark),
-                new CodeInstruction(OpCodes.Ldstr, "Right: ").WithLabels(rightMark),
+                new CodeInstruction(OpCodes.Ldstr, "  Right OP: ").WithLabels(rightMark),
+                new(OpCodes.Ldc_I4_0),
                 new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.AskForInput))),
                 new(OpCodes.Ldloca_S, right.LocalIndex),
                 new(OpCodes.Call, GetDeclaredMethods(typeof(float)).FirstOrDefault(m => m.Name == "TryParse" && m.GetParameters().Count() < 3)),
@@ -98,14 +102,14 @@ namespace Naylo
                 new(OpCodes.Ldloc_S, computationType.LocalIndex),
                 new(OpCodes.Callvirt, Method(typeof(MathProcessor), nameof(MathProcessor.Compute))),
                 new(OpCodes.Stloc_S, result.LocalIndex),
-                new(OpCodes.Ldstr, "Result: "),
+                new(OpCodes.Ldstr, "  Result: "),
                 new(OpCodes.Ldloca_S, result.LocalIndex),
                 new(OpCodes.Callvirt, Method(typeof(float), nameof(float.ToString), new Type[] { })),
                 new(OpCodes.Call, Method(typeof(string), nameof(string.Concat), new[] { typeof(string), typeof(object) })),
                 new(OpCodes.Call, Method(typeof(Console), nameof(Console.WriteLine), new[] { typeof(string) })),
                 new(OpCodes.Ldc_I4_S, (int)ConsoleColor.Red),
                 new(OpCodes.Call, PropertySetter(typeof(Console), nameof(Console.ForegroundColor))),
-                new(OpCodes.Ldstr, "[INFO] Press ENTER to continue; otherwise, press any key to exit."),
+                new(OpCodes.Ldstr, "\n  [INFO] Press ENTER to continue; otherwise, press any key to exit."),
                 new(OpCodes.Call, Method(typeof(Console), nameof(Console.WriteLine), new[] { typeof(string) })),
                 new(OpCodes.Call, Method(typeof(Console), nameof(Console.ReadKey))),
                 new(OpCodes.Stloc_S, consoleKey.LocalIndex),
@@ -114,6 +118,9 @@ namespace Naylo
                 new(OpCodes.Ldc_I4_S, (int)ConsoleKey.Enter),
                 new(OpCodes.Ceq),
                 new(OpCodes.Brfalse_S, ret),
+                new(OpCodes.Ldc_I4_S, (int)ConsoleColor.Red),
+                new(OpCodes.Call, Method(typeof(ConsoleExtensions), nameof(ConsoleExtensions.ClearConsole))),
+                new(OpCodes.Call, Method(typeof(HUDManager), nameof(HUDManager.Init))),
                 new CodeInstruction(OpCodes.Br_S, lpHd).WithLabels(iter),
                 new CodeInstruction(OpCodes.Ret).WithLabels(ret),
             });
